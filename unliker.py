@@ -9,7 +9,8 @@ consumer_key = privatefile.readline().strip()
 consumer_secret = privatefile.readline().strip()
 privatefile.close()
 
-# Callback as oob allows us to use the PIN method instead of the callback method. 
+# Callback as 'oob' allows us to use the PIN method instead of the callback method. 
+# tweepy OAuth process
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret, callback='oob')
 auth_url = auth.get_authorization_url()
 print('Authorization URL: ' + auth_url)
@@ -26,7 +27,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 username = api.me()
 username = username._json
 id = username['id']
-screenname = username['screenname']
+screenname = username['screen_name']
 
 # how long we're going to iterate
 favorites_count = username['favourites_count']
@@ -36,9 +37,5 @@ print(id)
 print(favorites_count)
 
 # for each like, delete it
-# for favorite in tweepy.Cursor(api.favorites, id=id).items(favorites_count):
-for favorite in tweepy.Cursor(api.favorites, id=id).items(2):
-    # print('Tweet author: '+str(favorite.user.screen_name.encode("utf-8")))
-    print('Tweet ID: '+str(favorite.id))
-    print(favorite)
-    # api.destroy_favorite(favorite.id)
+for favorite in tweepy.Cursor(api.favorites, id=id).items(favorites_count):
+    api.destroy_favorite(favorite.id)
