@@ -33,9 +33,9 @@ screenname = username['screen_name']
 favorites_count = username['favourites_count']
 
 print(screenname)
-print(id)
 print(favorites_count)
 
 # for each like, delete it
 for favorite in tweepy.Cursor(api.favorites, id=id).items(favorites_count):
+    print(favorite.id)
     api.destroy_favorite(favorite.id)
